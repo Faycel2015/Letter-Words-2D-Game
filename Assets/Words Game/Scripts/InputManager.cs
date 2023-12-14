@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 using UnityEngine.UI;
 
 public class InputManager : MonoBehaviour
@@ -8,6 +9,7 @@ public class InputManager : MonoBehaviour
     [Header(" Elements ")]
     [SerializeField] private WordContainer[] wordContainers;
     [SerializeField] private Button tryButton;
+    [SerializeField] private KeyboardColorizer keyboardColorizer;
 
     [Header(" Settings ")]
     private int currentWordContainerIndex;
@@ -54,6 +56,9 @@ public class InputManager : MonoBehaviour
     {
         string wordToCheck = wordContainers[currentWordContainerIndex].GetWord();
         string secretWord = WordManager.instance.GetSecretWord();
+
+        wordContainers[currentWordContainerIndex].Colorize(secretWord);
+        keyboardColorizer.Colorize(secretWord, wordToCheck);
 
         if (wordToCheck == secretWord)
             Debug.Log("Level Complete");

@@ -269,6 +269,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e28c024481524c62b12ff03fcf18a82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  renderer: {fileID: 7938681899651666981}
   letterText: {fileID: 116480108889934771}
 --- !u!114 &1999512449385053103
 MonoBehaviour:
@@ -282,6 +283,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.7607843}
   m_EffectDistance: {x: 0, y: -4}
   m_UseGraphicAlpha: 1
