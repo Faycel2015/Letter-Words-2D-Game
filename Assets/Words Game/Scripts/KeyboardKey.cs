@@ -71,4 +71,9 @@ public class KeyboardKey : MonoBehaviour
         renderer.color = Color.gray;
         validity = Validity.Invalid;
     }
+
+    public bool IsUntouched()
+    {
+        return validity == Validity.None;
+    }
 }
