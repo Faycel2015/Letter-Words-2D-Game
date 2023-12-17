@@ -15,7 +15,34 @@ public class KeyboardColorizer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        GameManager.onGameStateChanged += GameStateChangedCallBack;
+    }
+
+    private void OnDestroy()
+    {
+        GameManager.onGameStateChanged -= GameStateChangedCallBack;
+    }
+
+    public void GameStateChangedCallBack(GameState gameState)
+    {
+        switch (gameState)
+        {
+            case GameState.Game:
+
+                Initialize();
+
+                break;
+
+            case GameState.LevelComplete:
+
+                break;
+        }
+    }
+
+    public void Initialize()
+    {
+        for (int i = 0; i < keys.Length; i++)
+            keys[i].Initialize();
     }
 
     // Update is called once per frame

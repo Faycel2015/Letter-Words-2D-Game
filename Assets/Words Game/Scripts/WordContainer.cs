@@ -30,6 +30,8 @@ public class WordContainer : MonoBehaviour
 
     public void Initialize()
     {
+        currentLetterIndex = 0;
+
         for (int i = 0; i < letterContainers.Length; i++)
             letterContainers[i].Initialize();
     }

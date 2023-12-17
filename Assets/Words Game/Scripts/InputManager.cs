@@ -21,6 +21,26 @@ public class InputManager : MonoBehaviour
         Initialize();
 
         KeyboardKey.onKeyPressed += KeyPressedCallback;
+        GameManager.onGameStateChanged += GameStateChangedCallBack;
+    }
+
+    private void OnDestroy()
+    {
+        KeyboardKey.onKeyPressed -= KeyPressedCallback;
+        GameManager.onGameStateChanged -= GameStateChangedCallBack;
+    }
+
+    public void GameStateChangedCallBack(GameState gameState)
+    {
+        switch (gameState)
+        {
+            case GameState.Game:
+                Initialize();
+                break;
+
+            case GameState.LevelComplete:
+                break;
+        }
     }
 
     // Update is called once per frame
@@ -31,6 +51,11 @@ public class InputManager : MonoBehaviour
 
     private void Initialize()
     {
+        currentWordContainerIndex = 0;
+        canAddLetter = true;
+
+        DisableTryButton();
+
         for (int i = 0; i < wordContainers.Length; i++)
             wordContainers[i].Initialize();
     }
@@ -46,9 +71,6 @@ public class InputManager : MonoBehaviour
         {
             canAddLetter = false;
             EnableTryButton();
-
-            //CheckWord();
-            //currentWordContainerIndex++;
         }
     }
 
@@ -61,19 +83,47 @@ public class InputManager : MonoBehaviour
         keyboardColorizer.Colorize(secretWord, wordToCheck);
 
         if (wordToCheck == secretWord)
-            Debug.Log("Level Complete");
+        {
+            SetLevelComplete();
+        }
         else
         {
-            Debug.Log("Wrong word");
-
-            canAddLetter = true;
-            DisableTryButton();
+            //Debug.Log("Wrong word");
             currentWordContainerIndex++;
+            DisableTryButton();
+
+            if(currentWordContainerIndex >= wordContainers.Length)
+            {
+                //Debug.Log("Gameover");
+                DataManager.instance.ResetScore();
+                GameManager.instance.SetGameState(GameState.Gameover);
+            }
+            else
+            {
+                canAddLetter = true;
+            }
         }
+    }
+
+    private void SetLevelComplete()
+    {
+        UpdateData();
+        GameManager.instance.SetGameState(GameState.LevelComplete);
+    }
+
+    public void UpdateData()
+    {
+        int scoreToAdd = 6 - currentWordContainerIndex;
+
+        DataManager.instance.IncreaseScore(scoreToAdd);
+        DataManager.instance.AddCoins(scoreToAdd * 3);
     }
 
     public void BackspacePressedCallback()
     {
+        if (!GameManager.instance.IsGameState())
+            return;
+
         bool removedLetter = wordContainers[currentWordContainerIndex].RemoveLetter();
 
         if (removedLetter)
