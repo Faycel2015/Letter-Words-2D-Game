@@ -8,6 +8,9 @@ public class HintManager : MonoBehaviour
     [SerializeField] private GameObject keyboard;
     private KeyboardKey[] keys;
 
+    [Header(" Settings ")]
+    private bool shouldReset;
+
     private void Awake()
     {
         keys = keyboard.GetComponentsInChildren<KeyboardKey>();
@@ -16,7 +19,40 @@ public class HintManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        GameManager.onGameStateChanged += GameStateChangedCallback;
+    }
+
+    private void OnDestroy()
+    {
+        GameManager.onGameStateChanged -= GameStateChangedCallback;
+    }
+
+    private void GameStateChangedCallback(GameState gameState)
+    {
+        switch (gameState)
+        {
+            case GameState.Menu:
+
+                break;
+
+            case GameState.Game:
+
+                if (shouldReset)
+                {
+                    letterHintGivenIndices.Clear();
+                    shouldReset = false;
+                }
+
+                break;
+
+            case GameState.LevelComplete:
+                shouldReset = true;
+                break;
+
+            case GameState.Gameover:
+                shouldReset = true;
+                break;
+        }
     }
 
     // Update is called once per frame
@@ -48,8 +84,29 @@ public class HintManager : MonoBehaviour
         t_untouchedKeys[randomKeyIndex].SetInvalid();
     }
 
+    List<int> letterHintGivenIndices = new List<int>();
+
     public void LetterHint()
     {
+        if(letterHintGivenIndices.Count >= 5)
+        {
+            Debug.Log("All hints");
+            return;
+        }
 
+        List<int> letterHintNotGivenIndices = new List<int>();
+
+        for (int i = 0; i < 5; i++)
+            if (!letterHintGivenIndices.Contains(i))
+                letterHintNotGivenIndices.Add(i);
+
+        WordContainer currentWordContainer = InputManager.instance.GetCurrentWordContainer();
+
+        string secretWord = WordManager.instance.GetSecretWord();
+
+        int randomIndex = letterHintNotGivenIndices[Random.Range(0, letterHintNotGivenIndices.Count)];
+        letterHintGivenIndices.Add(randomIndex);
+
+        currentWordContainer.AddAsHint(randomIndex, secretWord[randomIndex]);
     }
 }

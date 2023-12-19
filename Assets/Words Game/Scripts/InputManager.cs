@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class InputManager : MonoBehaviour
 {
+    public static WordManager instance;
+
     [Header(" Elements ")]
     [SerializeField] private WordContainer[] wordContainers;
     [SerializeField] private Button tryButton;
@@ -14,6 +16,7 @@ public class InputManager : MonoBehaviour
     [Header(" Settings ")]
     private int currentWordContainerIndex;
     private bool canAddLetter = true;
+    private bool shouldReset;
 
     // Start is called before the first frame update
     void Start()
@@ -35,10 +38,17 @@ public class InputManager : MonoBehaviour
         switch (gameState)
         {
             case GameState.Game:
-                Initialize();
+
+                if(shouldReset)
+                   Initialize();
                 break;
 
             case GameState.LevelComplete:
+                shouldReset = true;
+                break;
+
+            case GameState.Gameover:
+                shouldReset = true;
                 break;
         }
     }
@@ -58,6 +68,8 @@ public class InputManager : MonoBehaviour
 
         for (int i = 0; i < wordContainers.Length; i++)
             wordContainers[i].Initialize();
+
+        shouldReset = false;
     }
 
     private void KeyPressedCallback(char letter)
@@ -140,5 +152,15 @@ public class InputManager : MonoBehaviour
     private void DisableTryButton()
     {
         tryButton.interactable = false;
+    }
+
+    public WordContainer GetCurrentWordContainer()
+    {
+        return wordContainers[currentWordContainerIndex];
+    }
+
+    internal string GetSecretWord()
+    {
+        throw new NotImplementedException();
     }
 }

@@ -32,18 +32,28 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
-    public void NextButtonCallBack()
+    public void NextButtonCallback()
     {
         SetGameState(GameState.Game);
+    }
+
+    public void PlayButtonCallback()
+    {
+        SetGameState(GameState.Game);
+    }
+
+    public void BackButtonCallback()
+    {
+        SetGameState(GameState.Menu);
     }
 
     public bool IsGameState()
