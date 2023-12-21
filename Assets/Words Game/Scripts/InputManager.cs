@@ -1,12 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 using UnityEngine.UI;
+using System;
 
 public class InputManager : MonoBehaviour
 {
-    public static WordManager instance;
+    public static InputManager instance;
 
     [Header(" Elements ")]
     [SerializeField] private WordContainer[] wordContainers;
@@ -17,6 +17,18 @@ public class InputManager : MonoBehaviour
     private int currentWordContainerIndex;
     private bool canAddLetter = true;
     private bool shouldReset;
+
+    [Header(" Events ")]
+    public static Action onLetterAdded;
+    public static Action onLetterRemoved;
+
+    private void Awake()
+    {
+        if (instance == null)
+            instance = this;
+        else
+            Destroy(gameObject);
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -84,6 +96,8 @@ public class InputManager : MonoBehaviour
             canAddLetter = false;
             EnableTryButton();
         }
+
+        onLetterAdded?.Invoke();
     }
 
     public void CheckWord()
@@ -142,6 +156,8 @@ public class InputManager : MonoBehaviour
             DisableTryButton();
 
         canAddLetter = true;
+
+        onLetterRemoved?.Invoke();
     }
 
     private void EnableTryButton()
@@ -157,10 +173,5 @@ public class InputManager : MonoBehaviour
     public WordContainer GetCurrentWordContainer()
     {
         return wordContainers[currentWordContainerIndex];
-    }
-
-    internal string GetSecretWord()
-    {
-        throw new NotImplementedException();
     }
 }

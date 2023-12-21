@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class UIManager : MonoBehaviour
@@ -12,6 +13,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private CanvasGroup gameCG;
     [SerializeField] private CanvasGroup levelCompleteCG;
     [SerializeField] private CanvasGroup gameoverCG;
+    [SerializeField] private CanvasGroup settingsCG;
 
     [Header(" Menu Elements ")]
     [SerializeField] private TextMeshProUGUI menuCoins;
@@ -161,6 +163,16 @@ public class UIManager : MonoBehaviour
     private void HideGameover()
     {
         HideCG(gameoverCG);
+    }
+
+    public void ShowSettings()
+    {
+        ShowCG(settingsCG);
+    }
+
+    public void HideSettings()
+    {
+        HideCG(settingsCG);
     }
 
     private void ShowCG(CanvasGroup cg)
